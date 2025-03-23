@@ -172,7 +172,7 @@ while True:
 cap.release()
 cv2.destroyAllWindows()
 ```
-
+Sau đó các frame nhận diện được bởi mô hình sẽ được lưu vào folder detected_frames
 
 
 
@@ -182,8 +182,8 @@ Dự án được phát triển bởi 3 thành viên:
 
 | Họ và Tên                | Vai trò                  |
 |--------------------------|--------------------------|
-| Võ Vĩnh Thái             | Phát triển toàn bộ mã nguồn,kiểm thử, triển khai dự án và thực hiện video giới thiệu,biên                              soạn tài liệu Overleaf ,Powerpoint, thuyết trình, đề xuất cải tiến.|
-| Lê Ngọc Hưng            | Hỗ trợ bài tập lớn.|
-| Phạm Tiến Dũng   | Hỗ trợ bài tập lớn.  |
+| Võ Vĩnh Thái             | Phát triển toàn bộ mã nguồn,kiểm thử, triển khai dự án, thuyết trình, đề xuất cải tiến.|
+| Lê Ngọc Hưng            | Thực hiện video giới thiệu|
+| Phạm Tiến Dũng   | Viết báo cáo.  |
 
-© 2025 NHÓM 7, CNTT 17-15, TRƯỜNG ĐẠI HỌC ĐẠI NAM
+© 2025 NHÓM 2, CNTT 16-01, TRƯỜNG ĐẠI HỌC ĐẠI NAM
