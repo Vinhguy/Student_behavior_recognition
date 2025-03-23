@@ -173,12 +173,12 @@ Sau đó các frame nhận diện được bởi mô hình sẽ được lưu v�
 ## Kết quả train model
 Ma trận nhầm lẫn
 <p align="center">
-  <img src="./anhimage/confusion_matrix.png" alt="Flowchart" width="800"/>
+  <img src="./anhimage/confusion_matrix.png" alt="matrix" width="800"/>
 </p>
 <br>
 Độ chính xác trung bình của các nhãn
 <p align="center">
-  <img src="./anhimage/model_test.png" alt="Flowchart" width="800"/>
+  <img src="./anhimage/model_test.jpg" alt="model_test" width="800"/>
 </p>
 ## 🤝 Đóng góp
 Dự án được phát triển bởi 3 thành viên:
