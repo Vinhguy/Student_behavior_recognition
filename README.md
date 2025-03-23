@@ -15,7 +15,7 @@
 <h2 align="center">Sử Dụng Yolov8 Để Nhận Diện Hành Vi Của Sinh Viên</h2>
 
 <p align="left">
-  Nhận diện hành vi học sinh trong lớp học sử dụng YOLOv7 là ứng dụng công nghệ AI để phát hiện hành vi như giơ tay, sử dụng điện thoại. YOLOv7 giúp nhận diện đối tượng trong ảnh/video theo thời gian thực, hỗ trợ giáo viên quản lý lớp học hiệu quả hơn. Công nghệ này giúp tăng cường sự tương tác và giám sát, nâng cao chất lượng dạy và học.
+  Nhận diện hành vi học sinh trong lớp học sử dụng YOLOv8 là ứng dụng công nghệ AI để phát hiện hành vi như giơ tay, sử dụng điện thoại. YOLOv8 giúp nhận diện đối tượng trong ảnh/video theo thời gian thực, hỗ trợ giáo viên quản lý lớp học hiệu quả hơn. Công nghệ này giúp tăng cường sự tương tác và giám sát, nâng cao chất lượng dạy và học.
   Đề tài này sử dụng model YOLOV8 để nhận diện hành vi học sinh với các hành vi như giơ tay, cúi đầu, sử dụng điện thoại/máy tính. YOLOV8 nổi tiếng với chức năng phát hiện đối tượng và phân loại cùng lúc theo thời gian thực, giúp giáo viên quản lý lớp học hiệu quả hơn. Bọn em chọn công nghẹ này để 
 
 
@@ -57,7 +57,7 @@
 ## 🚀 Hướng dẫn cài đặt và chạy
 
 
-## 🚀 Hướng dẫn cài đặt và chạy mô hình YOLOv7
+## 🚀 Hướng dẫn cài đặt và chạy mô hình YOLOv8
 
 ### Bước 1: Thu thập dữ liệu
 Sử dụng dataset đã được gán nhãn sẵn tại môi trường Trường Đại học Đại Nam:
@@ -65,7 +65,7 @@ Sử dụng dataset đã được gán nhãn sẵn tại môi trường Trườn
 [👉 Link Dataset](https://universe.roboflow.com/ttnt-nyz2m/ai-fxy4m/dataset/2)
 
 ### Bước 2: Sử dụng Google Colab để Train mô hình
-Truy cập vào Google Colab để thực hiện huấn luyện mô hình YOLOv7.
+Truy cập vào Google Colab để thực hiện huấn luyện mô hình YOLOv8.
 
 *Lưu ý: Nên sử dụng Colab Pro để huấn luyện mô hình nặng hơn.*
 
@@ -82,13 +82,13 @@ Cài đặt thư viện và Ultralytics bằng câu lệnh sau:
 ```
 
 ### Bước 4: Huấn luyện mô hình
-Sử dụng lệnh dưới đây để huấn luyện mô hình YOLOv7:
+Sử dụng lệnh dưới đây để huấn luyện mô hình YOLOv8:
 
 ```bash
-!python /content/yolov7/train.py \
-    --data "/content/drive/MyDrive/BTL_AII/AI.v3-ai.yolov7pytorch/data.yaml" \
-    --cfg "/content/yolov7/cfg/training/yolov7.yaml" \
-    --weights "/content/SCB-dataset/yolov7/yolov7.pt" \
+!python /content/yolov8/train.py \
+    --data "/content/drive/MyDrive/BTL_AII/AI.v3-ai.yolov8pytorch/data.yaml" \
+    --cfg "/content/yolov8/cfg/training/yolov8.yaml" \
+    --weights "/content/SCB-dataset/yolov8/yolov8.pt" \
     --epochs 50 \
     --batch-size 16 \
     --img-size 640 \
@@ -101,8 +101,8 @@ Sử dụng lệnh dưới đây để huấn luyện mô hình YOLOv7:
 *Lưu ý: Chỉnh lại các tham số batch-size, workers phù hợp với cấu hình GPU.*
 
 ### Bước 5: Nhận diện hành vi qua video
-Sau bước trên download best.pt từ file weights của file kết quả train
-Chạy mô hình YOLOv7 để nhận diện hành vi trong video sử dụng webcam laptop với đoạn mã sau:
+Download best.pt từ file weights của file kết quả train, rồi tạo file python để
+chạy mô hình YOLOv8 để nhận diện hành vi trong video sử dụng webcam laptop với đoạn mã sau:
 
 ```python
 
