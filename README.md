@@ -23,15 +23,9 @@
 
 ---
 
-## 🌟 Giới thiệu
+## 🌟 Kiến trúc hệ thống
 <p align="center">
   <img src="./anhimage/Flowchart.png" alt="Flowchart" width="800"/>
-</p>
-
----
-## 🏗️ HỆ THỐNG
-<p align="center">
-  <img src="./anhimage/yolov8-comparison-plots.png" alt="System Architecture" width="800"/>
 </p>
 
 ---
@@ -39,11 +33,12 @@
 
 ## 🛠️ CÔNG NGHỆ SỬ DỤNG
 
-<div align="center">
+<div align="left">
 
-<p align="center">
-  <img src="./anhimage/yolov8-comparison-plots.png" alt="System Architecture" width="800"/>
-</p>
+- **YOLOv8( model m hoặc l)**
+- **Google Colab**
+- **Thư viện Ultralytics**
+- **Python 3.x.x**
 </div>
 
 ##  Yêu cầu hệ thống
@@ -175,8 +170,16 @@ cv2.destroyAllWindows()
 Sau đó các frame nhận diện được bởi mô hình sẽ được lưu vào folder detected_frames
 
 
-
-
+## Kết quả train model
+Ma trận nhầm lẫn
+<p align="center">
+  <img src="./anhimage/confusion_matrix.png" alt="Flowchart" width="800"/>
+</p>
+<br>
+Độ chính xác trung bình của các nhãn
+<p align="center">
+  <img src="./anhimage/model_test.png" alt="Flowchart" width="800"/>
+</p>
 ## 🤝 Đóng góp
 Dự án được phát triển bởi 3 thành viên:
 
