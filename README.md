@@ -95,79 +95,117 @@ Sử dụng lệnh dưới đây để huấn luyện mô hình YOLOv8:
 ```
 *Lưu ý: Chỉnh lại các tham số batch-size, workers phù hợp với cấu hình GPU.*
 
-### Bước 5: Nhận diện hành vi qua video
+### Bước 5: Tạo bot Telegram để nhận thông báo
+Mở Telegram, tìm @BotFather.
+Gửi lệnh /start, sau đó gửi /newbot.
+Làm theo hướng dẫn để đặt tên bot và nhận Bot Token (ví dụ: 123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11).
+Gửi một tin nhắn bất kỳ đến bot của bạn (ví dụ: "Hello").
+Truy cập URL sau trong trình duyệt: , thay YOUR_BOT_TOKEN bằng token của bạn
+```python
+https://api.telegram.org/botYOUR_BOT_TOKEN/getUpdates
+```
+Tìm chat_id trong JSON trả về (ví dụ: 123456789).
+
+
+### Bước 6: Nhận diện hành vi qua video
 Download best.pt từ file weights của file kết quả train, rồi tạo file python để
 chạy mô hình YOLOv8 để nhận diện hành vi trong video sử dụng webcam laptop với đoạn mã sau:
 
 ```python
-
 import cv2
 import os
 import time
 from ultralytics import YOLO
+import requests
+
+# Thông tin Telegram Bot
+BOT_TOKEN = ''  # Thay bằng token của bạn
+CHAT_ID = ''       # Thay bằng chat ID của bạn
+TELEGRAM_API_URL = f'https://api.telegram.org/bot{BOT_TOKEN}/sendPhoto'
 
 # Load your custom YOLOv8 model
-model = YOLO('D:/aiot/models/best (2).pt')  # Replace with the correct path to your model
+model = YOLO('D:/aiot/models/best (2).pt')  # Đường dẫn đến model của bạn
 
 # Create the 'detected_frames' directory if it doesn't exist
-output_folder = 'detected_frames/final'
+output_folder = 'usingphone'
 if not os.path.exists(output_folder):
     os.makedirs(output_folder)
 
-# Open webcam (or video stream if needed)
-cap = cv2.VideoCapture(0)  # Use 0 for default webcam, or provide the video stream path
-
+# Open webcam
+cap = cv2.VideoCapture(0)
 if not cap.isOpened():
     print("Error: Could not open webcam.")
     exit()
 
-frame_count = 0  # Counter for naming saved frames
-last_save_time = 0  # Thời điểm lưu ảnh cuối cùng
+frame_count = 0
+last_save_time = 0
+last_notify_time = 0  # Thời điểm gửi thông báo cuối cùng
+
+def send_telegram_notification(image_path, class_name):
+    """Gửi ảnh và thông báo qua Telegram"""
+    with open(image_path, 'rb') as photo:
+        message = f"Phát hiện: {class_name}"
+        files = {'photo': photo}
+        data = {
+            'chat_id': CHAT_ID,
+            'caption': message
+        }
+        response = requests.post(TELEGRAM_API_URL, files=files, data=data)
+        if response.status_code == 200:
+            print(f"Đã gửi thông báo Telegram: {message}")
+        else:
+            print(f"Lỗi gửi thông báo Telegram: {response.text}")
 
 while True:
     ret, frame = cap.read()
-
     if not ret:
         print("Error: Could not read frame from webcam.")
         break
 
-    # Perform object detection on the frame
+    # Perform object detection
     results = model(frame)
 
     # Kiểm tra nếu có phát hiện đối tượng
-    if len(results) > 0:  # Đảm bảo results không rỗng
-        result = results[0]  # Lấy đối tượng Results đầu tiên
-        if len(result.boxes) > 0:  # Kiểm tra nếu có đối tượng được phát hiện
-            # Render results (bounding boxes, labels, etc.)
-            annotated_frame = result.plot()  # plot() trả về frame đã được vẽ
+    if len(results) > 0:
+        result = results[0]
+        if len(result.boxes) > 0:
+            # Lấy danh sách tên lớp của các đối tượng được phát hiện
+            class_ids = result.boxes.cls.cpu().numpy()
+            class_names = [result.names[int(cls_id)] for cls_id in class_ids]
+            annotated_frame = result.plot()  # Vẽ bounding boxes lên frame
 
-            # Lưu ảnh nếu đã qua 1 giây kể từ lần lưu trước
-            current_time = time.time()
-            if current_time - last_save_time >= 1:  # Kiểm tra thời gian
-                frame_filename = os.path.join(output_folder, f'frame_{frame_count:04d}.jpg')
-                cv2.imwrite(frame_filename, annotated_frame)  # Save the frame as an image
-                print(f"Đã lưu ảnh: {frame_filename}")
-                last_save_time = current_time  # Cập nhật thời gian lưu cuối cùng
-                frame_count += 1
+            # Kiểm tra nếu có nhãn "Using_phone"
+            if "Using_phone" in class_names:
+                current_time = time.time()
+                # Lưu ảnh nếu đã qua 1 giây
+                if current_time - last_save_time >= 1:
+                    frame_filename = os.path.join(output_folder, f'frame_{frame_count:04d}.jpg')
+                    cv2.imwrite(frame_filename, annotated_frame)
+                    print(f"Đã lưu ảnh: {frame_filename}")
+                    last_save_time = current_time
+                    frame_count += 1
+
+                    # Gửi thông báo Telegram nếu đã qua 5 giây
+                    if current_time - last_notify_time >= 5:
+                        send_telegram_notification(frame_filename, "Using_phone")
+                        last_notify_time = current_time
         else:
-            # Nếu không có đối tượng, dùng frame gốc để hiển thị
             annotated_frame = frame
     else:
-        # Nếu không có kết quả, dùng frame gốc
         annotated_frame = frame
 
-    # Display the annotated frame
+    # Hiển thị frame
     cv2.imshow('Live Stream Object Detection', annotated_frame)
 
-    # Exit loop when 'q' is pressed
+    # Thoát khi nhấn 'q'
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
-# Release video capture and close window
+# Giải phóng tài nguyên
 cap.release()
 cv2.destroyAllWindows()
 ```
-Sau đó các frame nhận diện được bởi mô hình sẽ được lưu vào folder detected_frames
+Sau đó các frame nhận diện được bởi mô hình sẽ được lưu vào folder detected_frames, và các hành vi dùng điện thoại sẽ được gửi qua Telegram
 
 
 ## Kết quả train model
